@@ -1,5 +1,5 @@
 import bpy
-class MainProperties(bpy.types.PropertyGroup):
+class SetupProperties(bpy.types.PropertyGroup):
     
     shapeKeyObject : bpy.props.PointerProperty(type= bpy.types.Object, name= "Shape Key Object", description= 'TODO')
     riggedObject : bpy.props.PointerProperty(type= bpy.types.Object, name= "Rigged Object", description= 'TODO')

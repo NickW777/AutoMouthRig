@@ -27,7 +27,7 @@ class RemoveComboShapeOperator(Operator):
         comboShapesProps.activeIndex -= 1
         return {'FINISHED'}
 
-class GenerateComboShapeDrivers(Operator):
+class GenerateComboShapeDriversOperator(Operator):
     bl_idname = "auto_mouth_rigger.generate_combo_shape_drivers"
     bl_label = 'Generate Combo Shape Drivers'
     bl_description = 'TODO'

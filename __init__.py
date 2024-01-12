@@ -12,56 +12,63 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "Nick Wierzbowski",
-    "author" : "Auto Mouth Rig",
+    "name" : "Auto Mouth Rig",
+    "author" : "Nick Wierzbowski",
     "description" : "",
     "blender" : (4, 0, 2),
     "version" : (0, 0, 3),
     "location" : "",
     "warning" : "",
-    "category" : "Generic"
+    "category" : "Rigging"
 }
 
 import bpy
-from .src.addon.operator.ButtonOperator import ButtonOperator
-from .src.addon.ui.MainPanel import MainPanel
-from .src.addon.ui.ComboShapesPanel import ComboShapesPanel
-from .src.addon.property.MainProperties import MainProperties
-from .src.addon.property.ComboShapesProperty import ComboShapesProperties
+
 from .src.addon.property.ComboShapesProperty import ComboShapeKey
+from .src.addon.ui.ComboShapesPanel import COMBOSHAPES_UL_list
+
+from .src.addon.property.SetupProperties import SetupProperties
+from .src.addon.property.ComboShapesProperty import ComboShapesProperties
+
+from .src.addon.operator.ButtonOperator import ButtonOperator
 from .src.addon.operator.ComboShapesOperator import AddComboShapeOperator
 from .src.addon.operator.ComboShapesOperator import RemoveComboShapeOperator
-from .src.addon.operator.ComboShapesOperator import GenerateComboShapeDrivers
-from .src.addon.ui.ComboShapesPanel import COMBOSHAPES_UL_list
-                
+from .src.addon.operator.ComboShapesOperator import GenerateComboShapeDriversOperator
+
+from .src.addon.ui.MouthControlsPanel import MouthControlsPanel
+from .src.addon.ui.SetupPanel import SetupPanel
+from .src.addon.ui.ComboShapesPanel import ComboShapesPanel
+
+
 __classes = [
     ComboShapeKey,
-    
-    MainProperties,
+
+    SetupProperties,
     ComboShapesProperties,
     
     COMBOSHAPES_UL_list,
     
-    MainPanel,
+    SetupPanel,
     ComboShapesPanel,
+    MouthControlsPanel,
     
     ButtonOperator,
     AddComboShapeOperator,
     RemoveComboShapeOperator,
-    GenerateComboShapeDrivers,
+    GenerateComboShapeDriversOperator,
 ]
-        
+
 def register():
     for cls in __classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.myTool = bpy.props.PointerProperty(type = MainProperties)
+    bpy.types.Scene.setupProps = bpy.props.PointerProperty(type = SetupProperties)
     bpy.types.Scene.comboShapesProps = bpy.props.PointerProperty(type = ComboShapesProperties)
     
     
 def unregister():
     for cls in __classes:
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.myTool
+    del bpy.types.Scene.setupProps
     del bpy.types.Scene.comboShapesProps
     
 
