@@ -15,6 +15,5 @@ class ComboShapeKey(PropertyGroup):
 
 class ComboShapesProperties(PropertyGroup):
     
-    shapeKeyObject : bpy.props.PointerProperty(type= bpy.types.Object, name= "Shape Key Object", description= 'TODO')#TODO
     myCollection : bpy.props.CollectionProperty(name= 'My Collection', description= 'TODO', type= ComboShapeKey)#TODO
     activeIndex : bpy.props.IntProperty()

@@ -35,7 +35,9 @@ class GenerateComboShapeDriversOperator(Operator):
     def execute(self, context):
         scene = context.scene
         comboShapesProps = scene.comboShapesProps
-        shapesObj = scene.objects[comboShapesProps.shapeKeyObject.name]
+        setupProps = scene.setupProps
+        
+        shapesObj = setupProps.shapeKeyObject
         shapeKeys = shapesObj.data.shape_keys.key_blocks
         for row in comboShapesProps.myCollection:
             driver = shapeKeys[row.comboShape].driver_add('value').driver

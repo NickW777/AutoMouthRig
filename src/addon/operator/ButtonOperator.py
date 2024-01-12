@@ -37,7 +37,7 @@ def createBone(armature, boneName, activationDist):
     
     bpy.ops.object.select_all(action='DESELECT')
     
-def addDriver(amtr, shapeKey, boneName, expression, transform):
+def addTransformDriver(amtr, shapeKey, boneName, expression, transform):
     driver = shapeKey.driver_add('value')
     driver.driver.type = 'SCRIPTED'
     driver.driver.expression = expression
@@ -58,17 +58,23 @@ class ButtonOperator(bpy.types.Operator):
         bpy.context.view_layer.objects.selected = []
         
         scene = context.scene
-        myTool = scene.myTool
+        mouthControlsProps = scene.mouthControlsProps
+        setupProps = scene.setupProps
+        comboShapesProps = scene.comboShapesProps
 
-        shapesObj = scene.objects[myTool.shapeKeyObject.name]
+        shapesObj = setupProps.shapeKeyObject
         vertexGrp = shapesObj.vertex_groups
         
         shapeKeys = shapesObj.data.shape_keys.key_blocks
-        transforms = [myTool.rightShapeKey, myTool.leftShapeKey, myTool.upShapeKey, myTool.downShapeKey]
+        
+        
+        #Each element in transforms is of the form +XName
+        #So transforms[i][2:] gives just the name of the ith shape key 
+        transforms = [mouthControlsProps.rightShapeKey, mouthControlsProps.leftShapeKey, mouthControlsProps.upShapeKey, mouthControlsProps.downShapeKey]
 
-        riggedObj = scene.objects[myTool.riggedObject.name]
+        riggedObj = scene.objects[setupProps.riggedObject.name]
 
-        amtr = scene.objects[myTool.armature.name]
+        amtr = scene.objects[setupProps.armature.name]
 
         for key in shapeKeys:
             key.value = 0
@@ -76,7 +82,7 @@ class ButtonOperator(bpy.types.Operator):
             
         for vg in vertexGrp:
             boneName = f'CTRL_{vg.name}'
-            createBone(amtr, boneName, myTool.activationDistance)
+            createBone(amtr, boneName, mouthControlsProps.activationDistance)
             
             for i in range(len(transforms)):
                 name = f'{vg.name}_{transforms[i]}'
@@ -95,8 +101,8 @@ class ButtonOperator(bpy.types.Operator):
                 shapeKeys[transforms[i][2:]].value = 0
                 shapeKeys[transforms[i][2:]].vertex_group = ''
                 
-                expression = f'{transforms[i][0]}var/{myTool.activationDistance}'
+                expression = f'{transforms[i][0]}var/{mouthControlsProps.activationDistance}'
                 transform = f'LOC_{transforms[i][1]}'
                 
-                addDriver(amtr, newShapeKey, boneName, expression, transform)
+                addTransformDriver(amtr, newShapeKey, boneName, expression, transform)
         return {'FINISHED'}
