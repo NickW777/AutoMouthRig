@@ -30,7 +30,7 @@ class RemoveComboShapeOperator(Operator):
 class GenerateComboShapeDriversOperator(Operator):
     bl_idname = "auto_mouth_rigger.generate_combo_shape_drivers"
     bl_label = 'Generate Combo Shape Drivers'
-    bl_description = 'TODO'
+    bl_description = 'TODO'#TODO
     
     def execute(self, context):
         scene = context.scene

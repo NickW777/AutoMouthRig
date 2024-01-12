@@ -52,6 +52,7 @@ def addDriver(amtr, shapeKey, boneName, expression, transform):
 class ButtonOperator(bpy.types.Operator):
     bl_idname = "automouthrigger.gen_mouth_controls"
     bl_label = "Generate Mouth Controls"
+    bl_description = 'TODO'#TODO
 
     def execute(self, context):
         bpy.context.view_layer.objects.selected = []
