@@ -29,6 +29,7 @@ from .src.addon.ui.ComboShapesPanel import COMBOSHAPES_UL_list
 
 from .src.addon.property.SetupProperties import SetupProperties
 from .src.addon.property.ComboShapesProperty import ComboShapesProperties
+from .src.addon.property.MouthControlsProperties import MouthControlsProperties
 
 from .src.addon.operator.ButtonOperator import ButtonOperator
 from .src.addon.operator.ComboShapesOperator import AddComboShapeOperator
@@ -45,6 +46,7 @@ __classes = [
 
     SetupProperties,
     ComboShapesProperties,
+    MouthControlsProperties,
     
     COMBOSHAPES_UL_list,
     
@@ -63,6 +65,7 @@ def register():
         bpy.utils.register_class(cls)
     bpy.types.Scene.setupProps = bpy.props.PointerProperty(type = SetupProperties)
     bpy.types.Scene.comboShapesProps = bpy.props.PointerProperty(type = ComboShapesProperties)
+    bpy.types.Scene.mouthControlsProps = bpy.props.PointerProperty(type= MouthControlsProperties)
     
     
 def unregister():
@@ -70,7 +73,7 @@ def unregister():
         bpy.utils.unregister_class(cls)
     del bpy.types.Scene.setupProps
     del bpy.types.Scene.comboShapesProps
-    
+    del bpy.types.Scene.mouthControlsProps
 
 if __name__ == "__main__":
     register() 
