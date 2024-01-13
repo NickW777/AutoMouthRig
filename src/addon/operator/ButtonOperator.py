@@ -48,6 +48,9 @@ def addTransformDriver(amtr, shapeKey, boneName, expression, transform):
     var.targets[0].bone_target = boneName
     var.targets[0].transform_type = transform
     var.targets[0].transform_space = 'LOCAL_SPACE'
+    
+def getShapeName(vertexGroup, originalShape):
+    return f'{vertexGroup.name}_{originalShape}'
 
 class ButtonOperator(bpy.types.Operator):
     bl_idname = "automouthrigger.gen_mouth_controls"
@@ -63,16 +66,16 @@ class ButtonOperator(bpy.types.Operator):
         comboShapesProps = scene.comboShapesProps
 
         shapesObj = setupProps.shapeKeyObject
+        riggedObj = setupProps.riggedObject
         vertexGrp = shapesObj.vertex_groups
         
         shapeKeys = shapesObj.data.shape_keys.key_blocks
         
         
-        #Each element in transforms is of the form +XName
-        #So transforms[i][2:] gives just the name of the ith shape key 
+        
+        #Each element in transforms is of the form '+XName'
+        #So transforms[i][2:] gives just the 'Name' of the ith shape key 
         transforms = [mouthControlsProps.rightShapeKey, mouthControlsProps.leftShapeKey, mouthControlsProps.upShapeKey, mouthControlsProps.downShapeKey]
-
-        riggedObj = scene.objects[setupProps.riggedObject.name]
 
         amtr = scene.objects[setupProps.armature.name]
 
@@ -83,11 +86,11 @@ class ButtonOperator(bpy.types.Operator):
         for vg in vertexGrp:
             boneName = f'CTRL_{vg.name}'
             createBone(amtr, boneName, mouthControlsProps.activationDistance)
-            
-            for i in range(len(transforms)):
-                name = f'{vg.name}_{transforms[i]}'
-                shapeKeys[transforms[i][2:]].value = 1
-                shapeKeys[transforms[i][2:]].vertex_group = vg.name
+
+            for str in transforms:
+                shapeName = getShapeName(vg, str)
+                shapeKeys[str[2:]].value = 1
+                shapeKeys[str[2:]].vertex_group = vg.name
                 
                 bpy.ops.object.select_all(action='DESELECT')
                 shapesObj.select_set(True)
@@ -96,13 +99,60 @@ class ButtonOperator(bpy.types.Operator):
                 bpy.context.view_layer.objects.active = riggedObj
                 bpy.ops.object.join_shapes()
                 newShapeKey = riggedObj.data.shape_keys.key_blocks[shapesObj.name]
-                newShapeKey.name = name
+                newShapeKey.name = shapeName
                 
-                shapeKeys[transforms[i][2:]].value = 0
-                shapeKeys[transforms[i][2:]].vertex_group = ''
+                shapeKeys[str[2:]].value = 0
+                shapeKeys[str[2:]].vertex_group = ''
                 
-                expression = f'{transforms[i][0]}var/{mouthControlsProps.activationDistance}'
-                transform = f'LOC_{transforms[i][1]}'
+                expression = f'{str[0]}var/{mouthControlsProps.activationDistance}'
+                transform = f'LOC_{str[1]}'
                 
                 addTransformDriver(amtr, newShapeKey, boneName, expression, transform)
+
+            for row in comboShapesProps.myCollection:
+                comboShape = row.comboShape
+                leftShape = row.driverLeft
+                rightShape = row.driverRight
+                
+                comboName = getShapeName(vg, comboShape)
+                
+                shapeKeys[comboShape].value = 1
+                shapeKeys[comboShape].vertex_group = vg.name
+                
+                bpy.ops.object.select_all(action='DESELECT')
+                shapesObj.select_set(True)
+                riggedObj.select_set(True)
+                
+                bpy.context.view_layer.objects.active = riggedObj
+                bpy.ops.object.join_shapes()
+                newShapeKey = riggedObj.data.shape_keys.key_blocks[shapesObj.name]
+                newShapeKey.name = comboName
+                
+                shapeKeys[comboShape].value = 0
+                shapeKeys[comboShape].vertex_group = ''
+                
+                riggedShapeKeys = riggedObj.data.shape_keys.key_blocks
+                
+                driver = riggedShapeKeys[comboName].driver_add('value').driver
+                driver.type = 'SCRIPTED'
+                driver.expression = 'left*right'
+                
+                for str in transforms:
+                    if str[2:] == leftShape:
+                        leftVar = driver.variables.new()
+                        leftVar.type = 'SINGLE_PROP'
+                        leftVar.name = 'left'
+                        leftVar.targets[0].id = riggedObj
+                        leftVar.targets[0].data_path = f'data.shape_keys.key_blocks["{getShapeName(vg, str)}"].value'
+                        
+                    if str[2:] == rightShape:
+                        rightVar = driver.variables.new()
+                        rightVar.type = 'SINGLE_PROP'
+                        rightVar.name = 'right'
+                        rightVar.targets[0].id = riggedObj
+                        rightVar.targets[0].data_path = f'data.shape_keys.key_blocks["{getShapeName(vg, str)}"].value'
+                
+                
+                
+                
         return {'FINISHED'}
