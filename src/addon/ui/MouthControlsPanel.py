@@ -13,22 +13,22 @@ class MouthControlsPanel(Panel):
         layout = self.layout
 
         scene = context.scene
-        setupProps = scene.setupProps
-        mouthControlsProps = scene.mouthControlsProps
+        setup = scene.setup
+        mouthControls = scene.mouthControls
         
-        if setupProps.shapeKeyObject is not None and setupProps.riggedObject is not None and setupProps.armature is not None:
+        if setup.shapeKeyObject is not None and setup.riggedObject is not None and setup.armature is not None:
             row = layout.row()
-            row.prop(mouthControlsProps, "upShapeKey")
+            row.prop(mouthControls, "upShapeKey")
         
             row = layout.row()
-            row.prop(mouthControlsProps, "leftShapeKey")
-            row.prop(mouthControlsProps, "rightShapeKey")
+            row.prop(mouthControls, "leftShapeKey")
+            row.prop(mouthControls, "rightShapeKey")
             
             row = layout.row()
-            row.prop(mouthControlsProps, "downShapeKey")
+            row.prop(mouthControls, "downShapeKey")
             
             row = layout.row()
-            row.prop(mouthControlsProps, "activationDistance")
+            row.prop(mouthControls, "activationDistance")
             
             row = layout.row()
             row.operator(ButtonOperator.bl_idname, text="Generate Mouth Controls")

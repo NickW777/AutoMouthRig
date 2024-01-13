@@ -13,13 +13,13 @@ class SetupPanel(Panel):
         layout = self.layout
 
         scene = context.scene
-        setupProps = scene.setupProps
+        setup = scene.setup
 
         row = layout.row()
-        row.prop(setupProps, "shapeKeyObject")
+        row.prop(setup, "shapeKeyObject")
         
         row = layout.row()
-        row.prop(setupProps, "riggedObject")
+        row.prop(setup, "riggedObject")
         
         row = layout.row()
-        row.prop(setupProps, "armature")
+        row.prop(setup, "armature")

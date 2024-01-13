@@ -36,13 +36,13 @@ class ComboShapesPanel(Panel):
         layout = self.layout
 
         scene = context.scene
-        comboShapesProps = scene.comboShapesProps
-        setupProps = scene.setupProps
+        comboShapes = scene.comboShapes
+        setup = scene.setup
 
         # row = layout.row()
         # row.prop(comboShapesProps, "shapeKeyObject")
 
-        if setupProps.shapeKeyObject is not None:
+        if setup.shapeKeyObject is not None:
             row = layout.row()
             col = row.column()
             col.label(text='Combo Shape Key')
@@ -51,7 +51,7 @@ class ComboShapesPanel(Panel):
             col = row.column()
             col.label(text='Driving Shape Key')
             row = layout.row()
-            row.template_list("COMBOSHAPES_UL_list", "", comboShapesProps, "myCollection", comboShapesProps, "activeIndex", rows=3)
+            row.template_list("COMBOSHAPES_UL_list", "", comboShapes, "myCollection", comboShapes, "activeIndex", rows=3)
             
             col = row.column(align= True)
             col.operator(AddComboShapeOperator.bl_idname, icon='ADD', text='')

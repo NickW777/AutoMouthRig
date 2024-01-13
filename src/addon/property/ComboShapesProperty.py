@@ -3,7 +3,7 @@ from bpy.types import PropertyGroup
 
 def getList(scene, context):
         items = []
-        for s in context.scene.setupProps.shapeKeyObject.data.shape_keys.key_blocks[1:]:
+        for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:
             items.append((f'{s.name}',s.name,"TODO"))#TODO
         return items
 

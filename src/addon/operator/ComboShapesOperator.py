@@ -9,10 +9,10 @@ class AddComboShapeOperator(Operator):
     
     def execute(self, context):
         scene = context.scene
-        comboShapesProps = scene.comboShapesProps
-        newItem = comboShapesProps.myCollection.add()
+        comboShapes = scene.comboShapes
+        newItem = comboShapes.myCollection.add()
         newItem.name = 'New Item'
-        comboShapesProps.activeIndex = len(comboShapesProps.myCollection) - 1
+        comboShapes.activeIndex = len(comboShapes.myCollection) - 1
         return {'FINISHED'}
     
 class RemoveComboShapeOperator(Operator):
@@ -22,9 +22,9 @@ class RemoveComboShapeOperator(Operator):
     
     def execute(self, context):
         scene = context.scene
-        comboShapesProps = scene.comboShapesProps
-        comboShapesProps.myCollection.remove(comboShapesProps.activeIndex)
-        comboShapesProps.activeIndex -= 1
+        comboShapes = scene.comboShapes
+        comboShapes.myCollection.remove(comboShapes.activeIndex)
+        comboShapes.activeIndex -= 1
         return {'FINISHED'}
 
 # class GenerateComboShapeDriversOperator(Operator):

@@ -79,21 +79,21 @@ class ButtonOperator(bpy.types.Operator):
         bpy.context.view_layer.objects.selected = []
         
         scene = context.scene
-        mouthControlsProps = scene.mouthControlsProps
-        setupProps = scene.setupProps
-        comboShapesProps = scene.comboShapesProps
+        mouthControls = scene.mouthControls
+        setup = scene.setup
+        comboShapes = scene.comboShapes
 
-        shapesObj = setupProps.shapeKeyObject
-        riggedObj = setupProps.riggedObject
+        shapesObj = setup.shapeKeyObject
+        riggedObj = setup.riggedObject
         vertexGrp = shapesObj.vertex_groups
         
         shapeKeys = shapesObj.data.shape_keys.key_blocks
         
         #Each element in transforms is of the form '+XName'
         #So transforms[i][2:] gives just the 'Name' of the ith shape key 
-        transforms = [mouthControlsProps.rightShapeKey, mouthControlsProps.leftShapeKey, mouthControlsProps.upShapeKey, mouthControlsProps.downShapeKey]
+        transforms = [mouthControls.rightShapeKey, mouthControls.leftShapeKey, mouthControls.upShapeKey, mouthControls.downShapeKey]
 
-        amtr = scene.objects[setupProps.armature.name]
+        amtr = scene.objects[setup.armature.name]
 
         for key in shapeKeys:
             key.value = 0
@@ -101,18 +101,18 @@ class ButtonOperator(bpy.types.Operator):
             
         for vg in vertexGrp:
             boneName = f'CTRL_{vg.name}'
-            createBone(amtr, boneName, mouthControlsProps.activationDistance)            
+            createBone(amtr, boneName, mouthControls.activationDistance)            
 
             for str in transforms:
                 name = getShapeName(vg, str)
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=str[2:], newName=name, sourceObj=shapesObj, targetObj=riggedObj)
                 
-                expression = f'{str[0]}var/{mouthControlsProps.activationDistance}'
+                expression = f'{str[0]}var/{mouthControls.activationDistance}'
                 transform = f'LOC_{str[1]}'
                 
                 addTransformDriver(amtr, newShapeKey, boneName, expression, transform) 
 
-            for row in comboShapesProps.myCollection:
+            for row in comboShapes.myCollection:
                 comboShape = row.comboShape
                 leftShape = row.driverLeft
                 rightShape = row.driverRight

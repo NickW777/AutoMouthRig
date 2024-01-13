@@ -63,17 +63,17 @@ __classes = [
 def register():
     for cls in __classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.setupProps = bpy.props.PointerProperty(type = SetupProperties)
-    bpy.types.Scene.comboShapesProps = bpy.props.PointerProperty(type = ComboShapesProperties)
-    bpy.types.Scene.mouthControlsProps = bpy.props.PointerProperty(type= MouthControlsProperties)
+    bpy.types.Scene.setup = bpy.props.PointerProperty(type = SetupProperties)
+    bpy.types.Scene.comboShapes = bpy.props.PointerProperty(type = ComboShapesProperties)
+    bpy.types.Scene.mouthControls = bpy.props.PointerProperty(type= MouthControlsProperties)
     
     
 def unregister():
     for cls in __classes:
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.setupProps
-    del bpy.types.Scene.comboShapesProps
-    del bpy.types.Scene.mouthControlsProps
+    del bpy.types.Scene.setup
+    del bpy.types.Scene.comboShapes
+    del bpy.types.Scene.mouthControls
 
 if __name__ == "__main__":
     register() 
