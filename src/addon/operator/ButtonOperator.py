@@ -52,6 +52,24 @@ def addTransformDriver(amtr, shapeKey, boneName, expression, transform):
 def getShapeName(vertexGroup, originalShape):
     return f'{vertexGroup.name}_{originalShape}'
 
+def transferShapeKeyWithVertexGroup(shapeKeys, vertexGroup, oldName, newName, sourceObj, targetObj):
+    shapeKeys[oldName].value = 1
+    shapeKeys[oldName].vertex_group = vertexGroup.name
+    
+    bpy.ops.object.select_all(action='DESELECT')
+    sourceObj.select_set(True)
+    targetObj.select_set(True)
+    
+    bpy.context.view_layer.objects.active = targetObj
+    bpy.ops.object.join_shapes()
+    newShapeKey = targetObj.data.shape_keys.key_blocks[sourceObj.name]
+    newShapeKey.name = newName
+    
+    shapeKeys[oldName].value = 0
+    shapeKeys[oldName].vertex_group = ''
+    
+    return newShapeKey
+
 class ButtonOperator(bpy.types.Operator):
     bl_idname = "automouthrigger.gen_mouth_controls"
     bl_label = "Generate Mouth Controls"
@@ -71,8 +89,6 @@ class ButtonOperator(bpy.types.Operator):
         
         shapeKeys = shapesObj.data.shape_keys.key_blocks
         
-        
-        
         #Each element in transforms is of the form '+XName'
         #So transforms[i][2:] gives just the 'Name' of the ith shape key 
         transforms = [mouthControlsProps.rightShapeKey, mouthControlsProps.leftShapeKey, mouthControlsProps.upShapeKey, mouthControlsProps.downShapeKey]
@@ -85,29 +101,16 @@ class ButtonOperator(bpy.types.Operator):
             
         for vg in vertexGrp:
             boneName = f'CTRL_{vg.name}'
-            createBone(amtr, boneName, mouthControlsProps.activationDistance)
+            createBone(amtr, boneName, mouthControlsProps.activationDistance)            
 
             for str in transforms:
-                shapeName = getShapeName(vg, str)
-                shapeKeys[str[2:]].value = 1
-                shapeKeys[str[2:]].vertex_group = vg.name
-                
-                bpy.ops.object.select_all(action='DESELECT')
-                shapesObj.select_set(True)
-                riggedObj.select_set(True)
-                
-                bpy.context.view_layer.objects.active = riggedObj
-                bpy.ops.object.join_shapes()
-                newShapeKey = riggedObj.data.shape_keys.key_blocks[shapesObj.name]
-                newShapeKey.name = shapeName
-                
-                shapeKeys[str[2:]].value = 0
-                shapeKeys[str[2:]].vertex_group = ''
+                name = getShapeName(vg, str)
+                newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=str[2:], newName=name, sourceObj=shapesObj, targetObj=riggedObj)
                 
                 expression = f'{str[0]}var/{mouthControlsProps.activationDistance}'
                 transform = f'LOC_{str[1]}'
                 
-                addTransformDriver(amtr, newShapeKey, boneName, expression, transform)
+                addTransformDriver(amtr, newShapeKey, boneName, expression, transform) 
 
             for row in comboShapesProps.myCollection:
                 comboShape = row.comboShape
@@ -116,20 +119,7 @@ class ButtonOperator(bpy.types.Operator):
                 
                 comboName = getShapeName(vg, comboShape)
                 
-                shapeKeys[comboShape].value = 1
-                shapeKeys[comboShape].vertex_group = vg.name
-                
-                bpy.ops.object.select_all(action='DESELECT')
-                shapesObj.select_set(True)
-                riggedObj.select_set(True)
-                
-                bpy.context.view_layer.objects.active = riggedObj
-                bpy.ops.object.join_shapes()
-                newShapeKey = riggedObj.data.shape_keys.key_blocks[shapesObj.name]
-                newShapeKey.name = comboName
-                
-                shapeKeys[comboShape].value = 0
-                shapeKeys[comboShape].vertex_group = ''
+                newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=comboShape, newName=comboName, sourceObj=shapesObj, targetObj=riggedObj)
                 
                 riggedShapeKeys = riggedObj.data.shape_keys.key_blocks
                 
@@ -151,8 +141,4 @@ class ButtonOperator(bpy.types.Operator):
                         rightVar.name = 'right'
                         rightVar.targets[0].id = riggedObj
                         rightVar.targets[0].data_path = f'data.shape_keys.key_blocks["{getShapeName(vg, str)}"].value'
-                
-                
-                
-                
         return {'FINISHED'}

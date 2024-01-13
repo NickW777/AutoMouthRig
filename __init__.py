@@ -34,7 +34,7 @@ from .src.addon.property.MouthControlsProperties import MouthControlsProperties
 from .src.addon.operator.ButtonOperator import ButtonOperator
 from .src.addon.operator.ComboShapesOperator import AddComboShapeOperator
 from .src.addon.operator.ComboShapesOperator import RemoveComboShapeOperator
-from .src.addon.operator.ComboShapesOperator import GenerateComboShapeDriversOperator
+# from .src.addon.operator.ComboShapesOperator import GenerateComboShapeDriversOperator
 
 from .src.addon.ui.MouthControlsPanel import MouthControlsPanel
 from .src.addon.ui.SetupPanel import SetupPanel
@@ -57,7 +57,7 @@ __classes = [
     ButtonOperator,
     AddComboShapeOperator,
     RemoveComboShapeOperator,
-    GenerateComboShapeDriversOperator,
+    # GenerateComboShapeDriversOperator,
 ]
 
 def register():

@@ -3,7 +3,7 @@ from bpy.types import Panel
 from bpy.types import UIList
 from ..operator.ComboShapesOperator import AddComboShapeOperator
 from ..operator.ComboShapesOperator import RemoveComboShapeOperator
-from ..operator.ComboShapesOperator import GenerateComboShapeDriversOperator
+# from ..operator.ComboShapesOperator import GenerateComboShapeDriversOperator
 
 class COMBOSHAPES_UL_list(UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
@@ -57,7 +57,7 @@ class ComboShapesPanel(Panel):
             col.operator(AddComboShapeOperator.bl_idname, icon='ADD', text='')
             col.operator(RemoveComboShapeOperator.bl_idname, icon='REMOVE', text='')
             
-            row = layout.row()
-            row.operator(GenerateComboShapeDriversOperator.bl_idname)
+            # row = layout.row()
+            # row.operator(GenerateComboShapeDriversOperator.bl_idname)
 
         
