@@ -1,6 +1,7 @@
 import bpy
 from bpy.types import Panel
-from ..operator.ButtonOperator import ButtonOperator
+from ..operator.GenerateControlsOperator import GenerateControlsOperator
+from ..operator.GenerateControlsOperator import DeleteControlsOperator
 
 class GenerateControlsPanel(Panel):
     bl_label = "Generate Controls"
@@ -10,8 +11,13 @@ class GenerateControlsPanel(Panel):
     bl_category = "AutoMouthRig"
 
     def draw(self, context):
+        scene = context.scene
+        state = scene.state
         layout = self.layout
             
         row = layout.row()
-        row.operator(ButtonOperator.bl_idname, text="Generate Mouth Controls")
+        if state.isGenerated:
+            row.operator(DeleteControlsOperator.bl_idname)
+        else:
+            row.operator(GenerateControlsOperator.bl_idname)
         

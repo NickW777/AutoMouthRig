@@ -1,4 +1,6 @@
+from typing import Set
 import bpy
+from bpy.types import Context
 
 def createBone(armature, boneName, activationDist):
     armature.select_set(True)
@@ -70,8 +72,8 @@ def transferShapeKeyWithVertexGroup(shapeKeys, vertexGroup, oldName, newName, so
     
     return newShapeKey
 
-class ButtonOperator(bpy.types.Operator):
-    bl_idname = "automouthrigger.gen_mouth_controls"
+class GenerateControlsOperator(bpy.types.Operator):
+    bl_idname = "automouthrigger.gen_controls"
     bl_label = "Generate Mouth Controls"
     bl_description = 'TODO'#TODO
 
@@ -79,9 +81,12 @@ class ButtonOperator(bpy.types.Operator):
         bpy.context.view_layer.objects.selected = []
         
         scene = context.scene
-        mouthControls = scene.mouthControls
+        mouthShapes = scene.mouthShapes
         setup = scene.setup
+        state = scene.state
         comboShapes = scene.comboShapes
+        
+        state.isGenerated = True
 
         shapesObj = setup.shapeKeyObject
         riggedObj = setup.riggedObject
@@ -91,7 +96,7 @@ class ButtonOperator(bpy.types.Operator):
         
         #Each element in transforms is of the form '+XName'
         #So transforms[i][2:] gives just the 'Name' of the ith shape key 
-        transforms = [mouthControls.rightShapeKey, mouthControls.leftShapeKey, mouthControls.upShapeKey, mouthControls.downShapeKey]
+        transforms = [mouthShapes.rightShapeKey, mouthShapes.leftShapeKey, mouthShapes.upShapeKey, mouthShapes.downShapeKey]
 
         amtr = scene.objects[setup.armature.name]
 
@@ -101,13 +106,13 @@ class ButtonOperator(bpy.types.Operator):
             
         for vg in vertexGrp:
             boneName = f'CTRL_{vg.name}'
-            createBone(amtr, boneName, mouthControls.activationDistance)            
+            createBone(amtr, boneName, mouthShapes.activationDistance)            
 
             for str in transforms:
                 name = getShapeName(vg, str)
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=str[2:], newName=name, sourceObj=shapesObj, targetObj=riggedObj)
                 
-                expression = f'{str[0]}var/{mouthControls.activationDistance}'
+                expression = f'{str[0]}var/{mouthShapes.activationDistance}'
                 transform = f'LOC_{str[1]}'
                 
                 addTransformDriver(amtr, newShapeKey, boneName, expression, transform) 
@@ -141,4 +146,17 @@ class ButtonOperator(bpy.types.Operator):
                         rightVar.name = 'right'
                         rightVar.targets[0].id = riggedObj
                         rightVar.targets[0].data_path = f'data.shape_keys.key_blocks["{getShapeName(vg, str)}"].value'
+        return {'FINISHED'}
+    
+class DeleteControlsOperator(bpy.types.Operator):
+    bl_idname = "automouthrigger.del_controls"
+    bl_label = "Delete Mouth Controls"
+    bl_description = 'TODO'#TODO
+    
+    def execute(self, context):
+        
+        scene = context.scene
+        state = scene.state
+        state.isGenerated = False
+        
         return {'FINISHED'}

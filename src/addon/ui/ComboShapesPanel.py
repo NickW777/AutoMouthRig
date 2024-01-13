@@ -39,9 +39,6 @@ class ComboShapesPanel(Panel):
         comboShapes = scene.comboShapes
         setup = scene.setup
 
-        # row = layout.row()
-        # row.prop(comboShapesProps, "shapeKeyObject")
-
         if setup.shapeKeyObject is not None:
             row = layout.row()
             col = row.column()
@@ -55,9 +52,4 @@ class ComboShapesPanel(Panel):
             
             col = row.column(align= True)
             col.operator(AddComboShapeOperator.bl_idname, icon='ADD', text='')
-            col.operator(RemoveComboShapeOperator.bl_idname, icon='REMOVE', text='')
-            
-            # row = layout.row()
-            # row.operator(GenerateComboShapeDriversOperator.bl_idname)
-
-        
+            col.operator(RemoveComboShapeOperator.bl_idname, icon='REMOVE', text='')   

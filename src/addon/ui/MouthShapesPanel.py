@@ -13,18 +13,18 @@ class MouthShapesPanel(Panel):
 
         scene = context.scene
         setup = scene.setup
-        mouthControls = scene.mouthControls
+        mouthShapes = scene.mouthShapes
         
         if setup.shapeKeyObject is not None and setup.riggedObject is not None and setup.armature is not None:
             row = layout.row()
-            row.prop(mouthControls, "upShapeKey")
+            row.prop(mouthShapes, "upShapeKey")
         
             row = layout.row()
-            row.prop(mouthControls, "leftShapeKey")
-            row.prop(mouthControls, "rightShapeKey")
+            row.prop(mouthShapes, "leftShapeKey")
+            row.prop(mouthShapes, "rightShapeKey")
             
             row = layout.row()
-            row.prop(mouthControls, "downShapeKey")
+            row.prop(mouthShapes, "downShapeKey")
             
             row = layout.row()
-            row.prop(mouthControls, "activationDistance")
+            row.prop(mouthShapes, "activationDistance")

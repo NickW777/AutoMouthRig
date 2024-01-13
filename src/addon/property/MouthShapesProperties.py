@@ -1,5 +1,5 @@
 import bpy
-class MouthControlsProperties(bpy.types.PropertyGroup):
+class MouthShapesProperties(bpy.types.PropertyGroup):
     def getListRight(scene, context):
         items = []
         for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:

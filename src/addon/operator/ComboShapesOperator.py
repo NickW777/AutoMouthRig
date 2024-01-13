@@ -26,34 +26,3 @@ class RemoveComboShapeOperator(Operator):
         comboShapes.myCollection.remove(comboShapes.activeIndex)
         comboShapes.activeIndex -= 1
         return {'FINISHED'}
-
-# class GenerateComboShapeDriversOperator(Operator):
-#     bl_idname = "auto_mouth_rigger.generate_combo_shape_drivers"
-#     bl_label = 'Generate Combo Shape Drivers'
-#     bl_description = 'TODO'#TODO
-    
-#     def execute(self, context):
-#         scene = context.scene
-#         comboShapesProps = scene.comboShapesProps
-#         setupProps = scene.setupProps
-        
-#         shapesObj = setupProps.shapeKeyObject
-#         shapeKeys = shapesObj.data.shape_keys.key_blocks
-#         for row in comboShapesProps.myCollection:
-#             driver = shapeKeys[row.comboShape].driver_add('value').driver
-#             driver.type = 'SCRIPTED'
-#             driver.expression = 'left*right'
-            
-#             leftVar = driver.variables.new()
-#             leftVar.type = 'SINGLE_PROP'
-#             leftVar.name = 'left'
-#             leftVar.targets[0].id = shapesObj
-#             leftVar.targets[0].data_path = f'data.shape_keys.key_blocks["{row.driverLeft}"].value'
-            
-#             rightVar = driver.variables.new()
-#             rightVar.type = 'SINGLE_PROP'
-#             rightVar.name = 'right'
-#             rightVar.targets[0].id = shapesObj
-#             rightVar.targets[0].data_path = f'data.shape_keys.key_blocks["{row.driverRight}"].value'
-        
-#         return {'FINISHED'}
