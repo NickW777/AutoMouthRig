@@ -25,6 +25,7 @@ bl_info = {
 import bpy
 
 from .src.addon.property.ComboShapesProperties import ComboShapeKey
+from .src.addon.property.AddonStateProperties import Strings
 from .src.addon.ui.ComboShapesPanel import COMBOSHAPES_UL_list
 
 from .src.addon.property.SetupProperties import SetupProperties
@@ -46,6 +47,7 @@ from .src.addon.ui.GenerateControlsPanel import GenerateControlsPanel
 
 __classes = [
     ComboShapeKey,
+    Strings,
 
     SetupProperties,
     ComboShapesProperties,

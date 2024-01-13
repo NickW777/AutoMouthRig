@@ -1,6 +1,5 @@
 from typing import Set
 import bpy
-from bpy.types import Context
 
 def createBone(armature, boneName, activationDist):
     armature.select_set(True)
@@ -106,10 +105,14 @@ class GenerateControlsOperator(bpy.types.Operator):
             
         for vg in vertexGrp:
             boneName = f'CTRL_{vg.name}'
-            createBone(amtr, boneName, mouthShapes.activationDistance)            
+            createBone(amtr, boneName, mouthShapes.activationDistance)   
+            
+            state.createdBones.add().value = boneName
 
             for str in transforms:
                 name = getShapeName(vg, str)
+                state.createdShapeKeys.add().value = name
+                
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=str[2:], newName=name, sourceObj=shapesObj, targetObj=riggedObj)
                 
                 expression = f'{str[0]}var/{mouthShapes.activationDistance}'
@@ -123,6 +126,7 @@ class GenerateControlsOperator(bpy.types.Operator):
                 rightShape = row.driverRight
                 
                 comboName = getShapeName(vg, comboShape)
+                state.createdShapeKeys.add().value = comboName
                 
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=comboShape, newName=comboName, sourceObj=shapesObj, targetObj=riggedObj)
                 
@@ -158,5 +162,29 @@ class DeleteControlsOperator(bpy.types.Operator):
         scene = context.scene
         state = scene.state
         state.isGenerated = False
+        
+        setup = scene.setup
+        riggedObj = setup.riggedObject
+        armature = setup.armature
+        
+        
+        #Go into edit mode on the armature
+        armature.select_set(True)
+        bpy.context.view_layer.objects.active = armature
+        bpy.ops.object.mode_set(mode='EDIT')
+        
+        #Select all the created bones
+        for boneName in state.createdBones:
+            armature.data.edit_bones[boneName.value].select = True
+        
+        #Delete selected bones
+        bpy.ops.armature.delete()
+        
+        #Leave edit mode and deselect everything
+        bpy.ops.object.mode_set(mode='OBJECT')
+        bpy.ops.object.select_all(action='DESELECT')
+        
+        
+        
         
         return {'FINISHED'}
