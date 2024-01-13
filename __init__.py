@@ -36,9 +36,10 @@ from .src.addon.operator.ComboShapesOperator import AddComboShapeOperator
 from .src.addon.operator.ComboShapesOperator import RemoveComboShapeOperator
 # from .src.addon.operator.ComboShapesOperator import GenerateComboShapeDriversOperator
 
-from .src.addon.ui.MouthControlsPanel import MouthControlsPanel
+from .src.addon.ui.MouthShapesPanel import MouthShapesPanel
 from .src.addon.ui.SetupPanel import SetupPanel
 from .src.addon.ui.ComboShapesPanel import ComboShapesPanel
+from .src.addon.ui.GenerateControlsPanel import GenerateControlsPanel
 
 
 __classes = [
@@ -50,14 +51,17 @@ __classes = [
     
     COMBOSHAPES_UL_list,
     
-    SetupPanel,
-    ComboShapesPanel,
-    MouthControlsPanel,
-    
     ButtonOperator,
     AddComboShapeOperator,
     RemoveComboShapeOperator,
     # GenerateComboShapeDriversOperator,
+    
+    SetupPanel,
+    MouthShapesPanel,
+    ComboShapesPanel,
+    GenerateControlsPanel,
+    
+    
 ]
 
 def register():
