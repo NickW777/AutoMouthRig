@@ -1,6 +1,5 @@
 import bpy
 from bpy.types import Panel
-from ..operator.ButtonOperator import ButtonOperator
 
 class SetupPanel(Panel):
     bl_label = "Setup"

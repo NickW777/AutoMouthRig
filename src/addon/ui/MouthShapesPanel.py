@@ -1,10 +1,9 @@
 import bpy
 from bpy.types import Panel
-from ..operator.ButtonOperator import ButtonOperator
 
-class MouthControlsPanel(Panel):
-    bl_label = "Mouth Controls"
-    bl_idname = "AUTO_MOUTH_RIGGER_PT_mouth_controls_panel"
+class MouthShapesPanel(Panel):
+    bl_label = "Mouth Shapes"
+    bl_idname = "AUTO_MOUTH_RIGGER_PT_mouth_shapes_panel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "AutoMouthRig"
@@ -29,7 +28,3 @@ class MouthControlsPanel(Panel):
             
             row = layout.row()
             row.prop(mouthControls, "activationDistance")
-            
-            row = layout.row()
-            row.operator(ButtonOperator.bl_idname, text="Generate Mouth Controls")
-        
