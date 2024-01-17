@@ -24,19 +24,22 @@ bl_info = {
 
 import bpy
 
-from .src.addon.property.ComboShapesProperties import ComboShapeKey
-from .src.addon.property.AddonStateProperties import Strings
+from .src.addon.properties.ComboShapesProperties import ComboShapeKey
+from .src.addon.properties.AddonStateProperties import Strings
 from .src.addon.ui.ComboShapesPanel import COMBOSHAPES_UL_list
+from .src.addon.types.Profile import Profile
 
-from .src.addon.property.SetupProperties import SetupProperties
-from .src.addon.property.ComboShapesProperties import ComboShapesProperties
-from .src.addon.property.MouthShapesProperties import MouthShapesProperties
-from .src.addon.property.AddonStateProperties import AddonStateProperties
+from .src.addon.properties.SetupProperties import SetupProperties
+from .src.addon.properties.ComboShapesProperties import ComboShapesProperties
+from .src.addon.properties.MouthShapesProperties import MouthShapesProperties
+from .src.addon.properties.AddonStateProperties import AddonStateProperties
 
 from .src.addon.operator.GenerateControlsOperator import GenerateControlsOperator
 from .src.addon.operator.GenerateControlsOperator import DeleteControlsOperator
 from .src.addon.operator.ComboShapesOperator import AddComboShapeOperator
 from .src.addon.operator.ComboShapesOperator import RemoveComboShapeOperator
+from .src.addon.operator.ProfileOperator import AddProfileOperator
+from .src.addon.operator.ProfileOperator import RemoveProfileOperator
 
 
 from .src.addon.ui.MouthShapesPanel import MouthShapesPanel
@@ -48,6 +51,7 @@ from .src.addon.ui.GenerateControlsPanel import GenerateControlsPanel
 __classes = [
     ComboShapeKey,
     Strings,
+    Profile,
 
     SetupProperties,
     ComboShapesProperties,
@@ -60,6 +64,8 @@ __classes = [
     DeleteControlsOperator,
     AddComboShapeOperator,
     RemoveComboShapeOperator,
+    AddProfileOperator,
+    RemoveProfileOperator,
     
     SetupPanel,
     MouthShapesPanel,

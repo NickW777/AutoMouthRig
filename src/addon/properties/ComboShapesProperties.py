@@ -11,7 +11,6 @@ class ComboShapeKey(PropertyGroup):
     comboShape : bpy.props.EnumProperty(name= '',  description='TODO', items= getList)#TODO
     driverLeft : bpy.props.EnumProperty(name= '',  description='TODO', items= getList)#TODO
     driverRight : bpy.props.EnumProperty(name= '',  description='TODO', items= getList)#TODO
-    activeIndex : bpy.props.IntProperty()
 
 class ComboShapesProperties(PropertyGroup):
     
