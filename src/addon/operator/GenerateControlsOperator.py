@@ -109,8 +109,10 @@ class GenerateControlsOperator(bpy.types.Operator):
             
             state.createdBones.add().value = boneName
 
+            #Create the base shape keys
             for str in transforms:
                 name = getShapeName(vg, str)
+                #Add the name of the shape key to the list of created shape keys
                 state.createdShapeKeys.add().value = name
                 
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=str[2:], newName=name, sourceObj=shapesObj, targetObj=riggedObj)
@@ -120,12 +122,14 @@ class GenerateControlsOperator(bpy.types.Operator):
                 
                 addTransformDriver(amtr, newShapeKey, boneName, expression, transform) 
 
+            #Create the combo shape keys
             for row in comboShapes.myCollection:
                 comboShape = row.comboShape
                 leftShape = row.driverLeft
                 rightShape = row.driverRight
                 
                 comboName = getShapeName(vg, comboShape)
+                #Add the name of the shape key to the list of created shape keys
                 state.createdShapeKeys.add().value = comboName
                 
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=comboShape, newName=comboName, sourceObj=shapesObj, targetObj=riggedObj)
@@ -184,7 +188,15 @@ class DeleteControlsOperator(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='OBJECT')
         bpy.ops.object.select_all(action='DESELECT')
         
+        #Delete all the created shape keys
+        for shape in state.createdShapeKeys:
+            riggedObj.shape_key_remove(riggedObj.data.shape_keys.key_blocks[shape.value])
+            
+        #Clear the lists of created bones and shape keys
+        state.createdBones.clear()
+        state.createdShapeKeys.clear()
         
-        
-        
+        #Select the shape key object and make it active
+        riggedObj.select_set(True)
+        bpy.context.view_layer.objects.active = riggedObj
         return {'FINISHED'}
