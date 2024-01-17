@@ -16,7 +16,7 @@ bl_info = {
     "author" : "Nick Wierzbowski",
     "description" : "",
     "blender" : (4, 0, 2),
-    "version" : (0, 0, 3),
+    "version" : (0, 0, 4),
     "location" : "",
     "warning" : "",
     "category" : "Rigging"
