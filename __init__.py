@@ -25,14 +25,13 @@ bl_info = {
 import bpy
 
 from .src.addon.properties.ComboShapesProperties import ComboShapeKey
-from .src.addon.properties.AddonStateProperties import Strings
+from .src.addon.types.String import String
 from .src.addon.ui.ComboShapesPanel import COMBOSHAPES_UL_list
 from .src.addon.types.Profile import Profile
 
 from .src.addon.properties.SetupProperties import SetupProperties
 from .src.addon.properties.ComboShapesProperties import ComboShapesProperties
 from .src.addon.properties.MouthShapesProperties import MouthShapesProperties
-from .src.addon.properties.AddonStateProperties import AddonStateProperties
 
 from .src.addon.operator.GenerateControlsOperator import GenerateControlsOperator
 from .src.addon.operator.GenerateControlsOperator import DeleteControlsOperator
@@ -50,13 +49,12 @@ from .src.addon.ui.GenerateControlsPanel import GenerateControlsPanel
 
 __classes = [
     ComboShapeKey,
-    Strings,
+    String,
     Profile,
 
     SetupProperties,
     ComboShapesProperties,
     MouthShapesProperties,
-    AddonStateProperties,
     
     COMBOSHAPES_UL_list,
     
@@ -78,19 +76,17 @@ __classes = [
 def register():
     for cls in __classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.state = bpy.props.PointerProperty(type= AddonStateProperties)
     bpy.types.Scene.setup = bpy.props.PointerProperty(type = SetupProperties)
-    bpy.types.Scene.comboShapes = bpy.props.PointerProperty(type = ComboShapesProperties)
-    bpy.types.Scene.mouthShapes = bpy.props.PointerProperty(type= MouthShapesProperties)
+    # bpy.types.Scene.comboShapes = bpy.props.PointerProperty(type = ComboShapesProperties)
+    # bpy.types.Scene.mouthShapes = bpy.props.PointerProperty(type= MouthShapesProperties)
     
     
 def unregister():
     for cls in __classes:
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.state
     del bpy.types.Scene.setup
-    del bpy.types.Scene.comboShapes
-    del bpy.types.Scene.mouthShapes
+    # del bpy.types.Scene.comboShapes
+    # del bpy.types.Scene.mouthShapes
 
 if __name__ == "__main__":
     register() 
