@@ -3,7 +3,8 @@ from bpy.types import PropertyGroup
 
 def getList(scene, context):
         items = []
-        for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:
+        profile = context.scene.setup.profiles[context.scene.setup.activeIndex] if len(context.scene.setup.profiles) > 0 else None
+        for s in profile.shapeKeyObject.data.shape_keys.key_blocks[1:]:
             items.append((f'{s.name}',s.name,"TODO"))#TODO
         return items
 

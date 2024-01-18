@@ -13,9 +13,13 @@ class MouthShapesPanel(Panel):
 
         scene = context.scene
         setup = scene.setup
-        mouthShapes = scene.mouthShapes
+        profile = setup.profiles[setup.activeIndex] if len(setup.profiles) > 0 else None
+        if profile is None:
+            layout.label(text="No profile selected")
+            return
+        mouthShapes = profile.mouthShapes
         
-        if setup.shapeKeyObject is not None and setup.riggedObject is not None and setup.armature is not None:
+        if profile.shapeKeyObject is not None and profile.riggedObject is not None and profile.armature is not None:
             row = layout.row()
             row.prop(mouthShapes, "upShapeKey")
         

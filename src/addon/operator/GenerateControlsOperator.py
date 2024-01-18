@@ -80,15 +80,15 @@ class GenerateControlsOperator(bpy.types.Operator):
         bpy.context.view_layer.objects.selected = []
         
         scene = context.scene
-        mouthShapes = scene.mouthShapes
         setup = scene.setup
-        state = scene.state
-        comboShapes = scene.comboShapes
+        profile = setup.profiles[setup.activeIndex] if len(setup.profiles) > 0 else None
+        comboShapes = profile.comboShapes
+        mouthShapes = profile.mouthShapes
         
-        state.isGenerated = True
+        profile.isGenerated = True
 
-        shapesObj = setup.shapeKeyObject
-        riggedObj = setup.riggedObject
+        shapesObj = profile.shapeKeyObject
+        riggedObj = profile.riggedObject
         vertexGrp = shapesObj.vertex_groups
         
         shapeKeys = shapesObj.data.shape_keys.key_blocks
@@ -97,7 +97,7 @@ class GenerateControlsOperator(bpy.types.Operator):
         #So transforms[i][2:] gives just the 'Name' of the ith shape key 
         transforms = [mouthShapes.rightShapeKey, mouthShapes.leftShapeKey, mouthShapes.upShapeKey, mouthShapes.downShapeKey]
 
-        amtr = scene.objects[setup.armature.name]
+        amtr = profile.armature
 
         for key in shapeKeys:
             key.value = 0
@@ -107,13 +107,13 @@ class GenerateControlsOperator(bpy.types.Operator):
             boneName = f'CTRL_{vg.name}'
             createBone(amtr, boneName, mouthShapes.activationDistance)   
             
-            state.createdBones.add().value = boneName
+            profile.createdBones.add().value = boneName
 
             #Create the base shape keys
             for str in transforms:
                 name = getShapeName(vg, str)
                 #Add the name of the shape key to the list of created shape keys
-                state.createdShapeKeys.add().value = name
+                profile.createdShapeKeys.add().value = name
                 
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=str[2:], newName=name, sourceObj=shapesObj, targetObj=riggedObj)
                 
@@ -130,7 +130,7 @@ class GenerateControlsOperator(bpy.types.Operator):
                 
                 comboName = getShapeName(vg, comboShape)
                 #Add the name of the shape key to the list of created shape keys
-                state.createdShapeKeys.add().value = comboName
+                profile.createdShapeKeys.add().value = comboName
                 
                 newShapeKey = transferShapeKeyWithVertexGroup(shapeKeys=shapeKeys, vertexGroup=vg, oldName=comboShape, newName=comboName, sourceObj=shapesObj, targetObj=riggedObj)
                 
@@ -164,12 +164,11 @@ class DeleteControlsOperator(bpy.types.Operator):
     def execute(self, context):
         
         scene = context.scene
-        state = scene.state
-        state.isGenerated = False
+        profile = scene.setup.profiles[scene.setup.activeIndex] if len(scene.setup.profiles) > 0 else None
+        profile.isGenerated = False
         
-        setup = scene.setup
-        riggedObj = setup.riggedObject
-        armature = setup.armature
+        riggedObj = profile.riggedObject
+        armature = profile.armature
         
         
         #Go into edit mode on the armature
@@ -178,7 +177,7 @@ class DeleteControlsOperator(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='EDIT')
         
         #Select all the created bones
-        for boneName in state.createdBones:
+        for boneName in profile.createdBones:
             armature.data.edit_bones[boneName.value].select = True
         
         #Delete selected bones
@@ -189,12 +188,12 @@ class DeleteControlsOperator(bpy.types.Operator):
         bpy.ops.object.select_all(action='DESELECT')
         
         #Delete all the created shape keys
-        for shape in state.createdShapeKeys:
+        for shape in profile.createdShapeKeys:
             riggedObj.shape_key_remove(riggedObj.data.shape_keys.key_blocks[shape.value])
             
         #Clear the lists of created bones and shape keys
-        state.createdBones.clear()
-        state.createdShapeKeys.clear()
+        profile.createdBones.clear()
+        profile.createdShapeKeys.clear()
         
         #Select the shape key object and make it active
         riggedObj.select_set(True)

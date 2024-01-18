@@ -1,26 +1,31 @@
 import bpy
 class MouthShapesProperties(bpy.types.PropertyGroup):
+
     def getListRight(scene, context):
         items = []
-        for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:
+        profile = context.scene.setup.profiles[context.scene.setup.activeIndex] if len(context.scene.setup.profiles) > 0 else None
+        for s in profile.shapeKeyObject.data.shape_keys.key_blocks[1:]:
             items.append((f'+X{s.name}',s.name,"TODO"))#TODO
         return items
     
     def getListLeft(scene, context):
         items = []
-        for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:
+        profile = context.scene.setup.profiles[context.scene.setup.activeIndex] if len(context.scene.setup.profiles) > 0 else None
+        for s in profile.shapeKeyObject.data.shape_keys.key_blocks[1:]:
             items.append((f'-X{s.name}',s.name,"TODO"))#TODO
         return items
     
     def getListUp(scene, context):
         items = []
-        for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:
+        profile = context.scene.setup.profiles[context.scene.setup.activeIndex] if len(context.scene.setup.profiles) > 0 else None
+        for s in profile.shapeKeyObject.data.shape_keys.key_blocks[1:]:
             items.append((f'+Z{s.name}',s.name,"TODO"))#TODO
         return items
     
     def getListDown(scene, context):
         items = []
-        for s in context.scene.setup.shapeKeyObject.data.shape_keys.key_blocks[1:]:
+        profile = context.scene.setup.profiles[context.scene.setup.activeIndex] if len(context.scene.setup.profiles) > 0 else None
+        for s in profile.shapeKeyObject.data.shape_keys.key_blocks[1:]:
             items.append((f'-Z{s.name}',s.name,"TODO"))#TODO
         return items
     

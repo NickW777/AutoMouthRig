@@ -48,13 +48,13 @@ from .src.addon.ui.GenerateControlsPanel import GenerateControlsPanel
 
 
 __classes = [
-    ComboShapeKey,
     String,
-    Profile,
-
-    SetupProperties,
+    ComboShapeKey,
+    
     ComboShapesProperties,
     MouthShapesProperties,
+    Profile,
+    SetupProperties,
     
     COMBOSHAPES_UL_list,
     
@@ -69,8 +69,6 @@ __classes = [
     MouthShapesPanel,
     ComboShapesPanel,
     GenerateControlsPanel,
-    
-    
 ]
 
 def register():

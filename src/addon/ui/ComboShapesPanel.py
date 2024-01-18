@@ -36,10 +36,15 @@ class ComboShapesPanel(Panel):
         layout = self.layout
 
         scene = context.scene
-        comboShapes = scene.comboShapes
         setup = scene.setup
+        profile = setup.profiles[setup.activeIndex] if len(setup.profiles) > 0 else None
+        
+        if profile is None:
+            layout.label(text="No profile selected")
+            return
+        comboShapes = profile.comboShapes
 
-        if setup.shapeKeyObject is not None:
+        if profile.shapeKeyObject is not None:
             row = layout.row()
             col = row.column()
             col.label(text='Combo Shape Key')

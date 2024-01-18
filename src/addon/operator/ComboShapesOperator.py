@@ -9,7 +9,9 @@ class AddComboShapeOperator(Operator):
     
     def execute(self, context):
         scene = context.scene
-        comboShapes = scene.comboShapes
+        setup = scene.setup
+        profile = setup.profiles[setup.activeIndex] if len(setup.profiles) > 0 else None
+        comboShapes = profile.comboShapes
         newItem = comboShapes.myCollection.add()
         newItem.name = 'New Item'
         comboShapes.activeIndex = len(comboShapes.myCollection) - 1
@@ -22,7 +24,9 @@ class RemoveComboShapeOperator(Operator):
     
     def execute(self, context):
         scene = context.scene
-        comboShapes = scene.comboShapes
+        setup = scene.setup
+        profile = setup.profiles[setup.activeIndex] if len(setup.profiles) > 0 else None
+        comboShapes = profile.comboShapes
         comboShapes.myCollection.remove(comboShapes.activeIndex)
         comboShapes.activeIndex -= 1
         return {'FINISHED'}
