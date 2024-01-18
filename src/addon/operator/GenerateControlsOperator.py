@@ -170,6 +170,9 @@ class DeleteControlsOperator(bpy.types.Operator):
         riggedObj = profile.riggedObject
         armature = profile.armature
         
+        #Delete drivers on created shape keys
+        for shape in profile.createdShapeKeys:
+            riggedObj.data.shape_keys.key_blocks[shape.value].driver_remove('value')
         
         #Go into edit mode on the armature
         armature.select_set(True)
